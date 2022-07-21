@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class ShooterFlywheelsCommand extends CommandBase {
   /** Creates a new ShooterFlywheelsCommand. */
@@ -37,11 +37,15 @@ public class ShooterFlywheelsCommand extends CommandBase {
     this.shooterSubsystem.flywheelShoot(flywheelValue);
 
     this.shooterSubsystem.setHoodAngle(this.shooterSubsystem.currentHoodAngle);
+
+    this.shooterSubsystem.setTurretAngle(this.shooterSubsystem.currentTurretAngle);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    this.shooterSubsystem.setHoodAngle(0.0);
+    this.shooterSubsystem.setTurretAngle(0.0);
   }
 
   // Returns true when the command should end.

@@ -7,33 +7,30 @@ package frc.robot.commands.teleop.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
-public class ShooterHoodUpCommand extends CommandBase {
+public class ShooterTurretUpCommand extends CommandBase {
   private ShooterSubsystem shooterSubsystem;
 
-  /** Creates a new ShooterHoodCommand. */
-  public ShooterHoodUpCommand(ShooterSubsystem shooterSubsystem) {
+  /** Creates a new ShooterTurretCommand. */
+  public ShooterTurretUpCommand(ShooterSubsystem shooterSubsystem) {
     this.shooterSubsystem = shooterSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-
     addRequirements(this.shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.shooterSubsystem.setHoodUpward(true);
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    this.shooterSubsystem.setTurretUpward(true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
   }
 
   // Returns true when the command should end.

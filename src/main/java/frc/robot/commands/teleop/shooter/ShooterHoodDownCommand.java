@@ -5,7 +5,7 @@
 package frc.robot.commands.teleop.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class ShooterHoodDownCommand extends CommandBase {
   private ShooterSubsystem shooterSubsystem;
