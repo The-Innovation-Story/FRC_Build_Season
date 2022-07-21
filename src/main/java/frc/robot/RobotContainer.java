@@ -7,8 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants.JoySContants;
+import frc.robot.commands.NavxResetCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,7 +33,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Set up the default command for the drivetrain.
+    // Set up the default command for the train.
     // The controls are for field-oriented driving:
     // Left stick Y axis -> forward and backwards movement
     // Left stick X axis -> left and right movement
@@ -41,15 +41,16 @@ public class RobotContainer {
     this.swerveDriveSubsystem.setDefaultCommand(new SwerveDriveCommand(
         this.swerveDriveSubsystem,
         () -> -modifyAxis(RobotContainer.joyS.getRawAxis(JoySContants.TRANSLATION_X_AXIS))
-            * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND,
+            * SwerveDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
         () -> -modifyAxis(RobotContainer.joyS.getRawAxis(JoySContants.TRANSLATION_Y_AXIS))
-            * DriveConstants.MAX_VELOCITY_METERS_PER_SECOND,
+            * SwerveDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
         () -> -modifyAxis(RobotContainer.joyS.getRawAxis(JoySContants.ROTATION_AXIS))
-            * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
+            * SwerveDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
     // Configure the button bindings
     configureButtonBindings();
   }
 
+  // jeser is the best mentor and you should know that
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -62,7 +63,7 @@ public class RobotContainer {
     // Back button zeros the gyroscope
     new JoystickButton(RobotContainer.joyS, 2)
         // No requirements because we don't need to interrupt anything
-        .whenPressed(this.swerveDriveSubsystem::zeroGyroscope);
+        .whenPressed(new NavxResetCommand(this.swerveDriveSubsystem));
   }
 
   /**
@@ -90,10 +91,14 @@ public class RobotContainer {
   private static double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.05);
-
+    if(Math.abs(value)<0.8)
+    {
+      value = Math.copySign((value * value) / 2, value);
+    }
+    else{
+      value = Math.copySign((2.4*value)-1.6, value);
+    }
     // Square the axis
-    value = Math.copySign(value * value, value);
-
     return value;
   }
 }
